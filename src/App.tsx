@@ -13,6 +13,7 @@ import Quran from './components/Quran';
 import Waktu from './components/Waktu';
 import Leaderboard from './components/Leaderboard';
 import Inquiry from './components/Inquiry';
+import AdminDashboard from './components/AdminDashboard';
 import { quotes } from './data/students';
 import { 
   getRamadhanDay, 
@@ -81,7 +82,7 @@ export default function App() {
   // Load user data when user or day changes
   useEffect(() => {
     async function loadUserData() {
-      if (currentUser) {
+      if (currentUser && currentUser !== 'admin') {
         const record = await getRecord(currentUser, currentDay);
         setCurrentRecord(record);
         
@@ -138,6 +139,10 @@ export default function App() {
         </div>
       </div>
     );
+  }
+
+  if (currentUser === 'admin') {
+    return <AdminDashboard onLogout={handleLogout} />;
   }
 
   return (

@@ -54,42 +54,47 @@ export default function Amalan({ currentUser, currentDay, record, onSave, onDayC
     setStatus('idle');
   }, [record, currentUser, currentDay]);
 
-  const handleChange = async (field: keyof AmalanRecord, value: any) => {
+  const handleChange = (field: keyof AmalanRecord, value: any) => {
     if (!isEditable) return;
 
     const updated = { ...formData, [field]: value };
     // Recalculate EXP immediately for display
     updated.total_exp = calculateExp(updated);
     setFormData(updated);
+    setStatus('idle');
+  };
+
+  const handleManualSave = async () => {
+    if (!isEditable) return;
     
-    // Auto save
     setStatus('saving');
     
     // Construct full record
     const fullRecord: AmalanRecord = {
       student_name: currentUser,
       day: currentDay,
-      sholat_subuh: updated.sholat_subuh || null,
-      sholat_dzuhur: updated.sholat_dzuhur || null,
-      sholat_ashar: updated.sholat_ashar || null,
-      sholat_maghrib: updated.sholat_maghrib || null,
-      sholat_isya: updated.sholat_isya || null,
-      sholat_tarawih: updated.sholat_tarawih || null,
-      sholat_dhuha: updated.sholat_dhuha || false,
-      infaq: updated.infaq || false,
-      dzikir: updated.dzikir || false,
-      itikaf: updated.itikaf || false,
-      tausiyah_ustadz: updated.tausiyah_ustadz || '',
-      tausiyah_tema: updated.tausiyah_tema || '',
-      tausiyah_intisari: updated.tausiyah_intisari || '',
-      quran_pages: updated.quran_pages || 0,
-      total_exp: updated.total_exp || 0,
+      sholat_subuh: formData.sholat_subuh || null,
+      sholat_dzuhur: formData.sholat_dzuhur || null,
+      sholat_ashar: formData.sholat_ashar || null,
+      sholat_maghrib: formData.sholat_maghrib || null,
+      sholat_isya: formData.sholat_isya || null,
+      sholat_tarawih: formData.sholat_tarawih || null,
+      sholat_dhuha: formData.sholat_dhuha || false,
+      infaq: formData.infaq || false,
+      dzikir: formData.dzikir || false,
+      itikaf: formData.itikaf || false,
+      tausiyah_ustadz: formData.tausiyah_ustadz || '',
+      tausiyah_tema: formData.tausiyah_tema || '',
+      tausiyah_intisari: formData.tausiyah_intisari || '',
+      quran_pages: formData.quran_pages || 0,
+      total_exp: formData.total_exp || 0,
       updated_at: new Date().toISOString()
     };
 
     try {
       await onSave(fullRecord);
-      setTimeout(() => setStatus('saved'), 500);
+      setStatus('saved');
+      setTimeout(() => setStatus('idle'), 2000);
     } catch (error) {
       console.error("Failed to save:", error);
       setStatus('error');
@@ -335,10 +340,25 @@ export default function Amalan({ currentUser, currentDay, record, onSave, onDayC
               <p className="text-3xl font-bold text-yellow-300">{formData.total_exp || 0} EXP</p>
             </div>
             <div className="text-right">
-              {status === 'saving' && <span className="text-yellow-400 text-sm">⏳ Menyimpan...</span>}
               {status === 'saved' && <span className="text-emerald-400 text-sm">✓ Tersimpan</span>}
             </div>
           </div>
+        </div>
+
+        <div className="mt-6">
+          <button 
+            onClick={handleManualSave}
+            disabled={!isEditable || status === 'saving'}
+            className={`w-full py-4 font-bold rounded-xl transition transform hover:scale-[1.02] active:scale-[0.98] cursor-pointer ${
+              !isEditable 
+                ? 'bg-gray-500/50 text-gray-300 cursor-not-allowed' 
+                : status === 'saving'
+                  ? 'bg-yellow-600 text-white cursor-wait'
+                  : 'golden-gradient text-gray-900 hover:opacity-90'
+            }`}
+          >
+            {status === 'saving' ? '⏳ Menyimpan...' : '💾 Simpan Amalan'}
+          </button>
         </div>
       </div>
 
