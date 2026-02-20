@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AmalanRecord } from '../types';
-import { calculateExp, getDateFromRamadhanDay, convertToHijri } from '../utils/ramadhan';
+import { calculateExp, getDateFromRamadhanDay, convertToHijri, getRamadhanDay } from '../utils/ramadhan';
 
 interface AmalanProps {
   currentUser: string;
@@ -14,6 +14,9 @@ export default function Amalan({ currentUser, currentDay, record, onSave, onDayC
   const [formData, setFormData] = useState<Partial<AmalanRecord>>({});
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [displayDate, setDisplayDate] = useState<{ gregorian: string; hijri: string }>({ gregorian: '', hijri: '' });
+  
+  const actualRamadhanDay = getRamadhanDay();
+  const isEditable = currentDay === actualRamadhanDay;
 
   useEffect(() => {
     // Update date display when currentDay changes
@@ -52,6 +55,8 @@ export default function Amalan({ currentUser, currentDay, record, onSave, onDayC
   }, [record, currentUser, currentDay]);
 
   const handleChange = async (field: keyof AmalanRecord, value: any) => {
+    if (!isEditable) return;
+
     const updated = { ...formData, [field]: value };
     // Recalculate EXP immediately for display
     updated.total_exp = calculateExp(updated);
@@ -92,11 +97,12 @@ export default function Amalan({ currentUser, currentDay, record, onSave, onDayC
   };
 
   const renderSholatRadio = (label: string, field: keyof AmalanRecord, icon: string) => (
-    <div className="bg-white/10 rounded-lg p-3 flex flex-col justify-between h-full">
+    <div className={`bg-white/10 rounded-lg p-3 flex flex-col justify-between h-full ${!isEditable ? 'opacity-50 pointer-events-none' : ''}`}>
       <p className="font-bold text-white mb-3 flex items-center gap-2 text-sm"><span className="text-lg">{icon}</span> {label}</p>
       <div className="flex gap-2">
         <button
           onClick={() => handleChange(field, formData[field] === 'jamaah' ? null : 'jamaah')}
+          disabled={!isEditable}
           className={`flex-1 py-2 px-1 rounded-lg text-xs font-medium transition-all duration-200 border ${
             formData[field] === 'jamaah'
               ? 'bg-emerald-500 border-emerald-400 text-white shadow-[0_0_10px_rgba(16,185,129,0.4)]'
@@ -108,6 +114,7 @@ export default function Amalan({ currentUser, currentDay, record, onSave, onDayC
         </button>
         <button
           onClick={() => handleChange(field, formData[field] === 'munfarid' ? null : 'munfarid')}
+          disabled={!isEditable}
           className={`flex-1 py-2 px-1 rounded-lg text-xs font-medium transition-all duration-200 border ${
             formData[field] === 'munfarid'
               ? 'bg-blue-500 border-blue-400 text-white shadow-[0_0_10px_rgba(59,130,246,0.4)]'
@@ -173,7 +180,17 @@ export default function Amalan({ currentUser, currentDay, record, onSave, onDayC
           </div>
         </div>
 
-        <div className="space-y-4">
+        {!isEditable && (
+          <div className="bg-red-500/20 border border-red-500/30 rounded-xl p-4 mb-6 flex items-center gap-3 animate-pulse">
+            <div className="text-2xl">🔒</div>
+            <div>
+              <p className="font-bold text-red-300">Form Terkunci</p>
+              <p className="text-sm text-white/80">Kamu hanya dapat mengisi amalan untuk hari ini (Hari ke-{actualRamadhanDay}).</p>
+            </div>
+          </div>
+        )}
+
+        <div className={`space-y-4 ${!isEditable ? 'opacity-60 pointer-events-none grayscale-[0.5]' : ''}`}>
           <div className="bg-emerald-500/20 rounded-xl p-4">
             <h3 className="font-bold text-emerald-300 mb-4 flex items-center gap-2">🕌 Sholat Wajib Berjamaah/Munfarid</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -190,6 +207,7 @@ export default function Amalan({ currentUser, currentDay, record, onSave, onDayC
                     type="checkbox" 
                     checked={formData.sholat_dhuha || false}
                     onChange={(e) => handleChange('sholat_dhuha', e.target.checked)}
+                    disabled={!isEditable}
                     className="w-5 h-5 rounded accent-emerald-500"
                   />
                   <span className="flex-1 font-bold text-white flex items-center gap-2"><span className="text-lg">☀️</span> Dhuha</span>
@@ -207,6 +225,7 @@ export default function Amalan({ currentUser, currentDay, record, onSave, onDayC
                   type="checkbox" 
                   checked={formData.infaq || false}
                   onChange={(e) => handleChange('infaq', e.target.checked)}
+                  disabled={!isEditable}
                   className="w-5 h-5 rounded accent-purple-500"
                 />
                 <span>💰 Infaq/Sedekah</span>
@@ -217,6 +236,7 @@ export default function Amalan({ currentUser, currentDay, record, onSave, onDayC
                   type="checkbox" 
                   checked={formData.dzikir || false}
                   onChange={(e) => handleChange('dzikir', e.target.checked)}
+                  disabled={!isEditable}
                   className="w-5 h-5 rounded accent-purple-500"
                 />
                 <span>📿 Dzikir</span>
@@ -227,6 +247,7 @@ export default function Amalan({ currentUser, currentDay, record, onSave, onDayC
                   type="checkbox" 
                   checked={formData.itikaf || false}
                   onChange={(e) => handleChange('itikaf', e.target.checked)}
+                  disabled={!isEditable}
                   className="w-5 h-5 rounded accent-purple-500"
                 />
                 <span>🕌 I'tikaf</span>
@@ -244,6 +265,7 @@ export default function Amalan({ currentUser, currentDay, record, onSave, onDayC
                   type="text" 
                   value={formData.tausiyah_ustadz || ''}
                   onChange={(e) => handleChange('tausiyah_ustadz', e.target.value)}
+                  disabled={!isEditable}
                   placeholder="Nama penceramah..."
                   className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-blue-400 text-sm"
                 />
@@ -254,6 +276,7 @@ export default function Amalan({ currentUser, currentDay, record, onSave, onDayC
                   type="text" 
                   value={formData.tausiyah_tema || ''}
                   onChange={(e) => handleChange('tausiyah_tema', e.target.value)}
+                  disabled={!isEditable}
                   placeholder="Judul atau tema ceramah..."
                   className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-blue-400 text-sm"
                 />
@@ -263,6 +286,7 @@ export default function Amalan({ currentUser, currentDay, record, onSave, onDayC
                 <textarea 
                   value={formData.tausiyah_intisari || ''}
                   onChange={(e) => handleChange('tausiyah_intisari', e.target.value)}
+                  disabled={!isEditable}
                   placeholder="Tuliskan ringkasan materi ceramah di sini..."
                   rows={3}
                   className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:border-blue-400 text-sm resize-none"
@@ -278,7 +302,8 @@ export default function Amalan({ currentUser, currentDay, record, onSave, onDayC
               <div className="flex items-center gap-2">
                 <button 
                   onClick={() => handleChange('quran_pages', Math.max(0, (formData.quran_pages || 0) - 1))}
-                  className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition text-xl font-bold cursor-pointer"
+                  disabled={!isEditable}
+                  className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition text-xl font-bold cursor-pointer disabled:opacity-50"
                 >
                   -
                 </button>
@@ -286,13 +311,15 @@ export default function Amalan({ currentUser, currentDay, record, onSave, onDayC
                   type="number" 
                   value={formData.quran_pages || 0}
                   onChange={(e) => handleChange('quran_pages', Math.max(0, Math.min(50, parseInt(e.target.value) || 0)))}
+                  disabled={!isEditable}
                   min="0" 
                   max="50" 
                   className="w-20 px-3 py-2 rounded-xl bg-white/10 border border-white/30 text-white text-center font-bold text-lg focus:outline-none"
                 />
                 <button 
                   onClick={() => handleChange('quran_pages', Math.min(50, (formData.quran_pages || 0) + 1))}
-                  className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition text-xl font-bold cursor-pointer"
+                  disabled={!isEditable}
+                  className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition text-xl font-bold cursor-pointer disabled:opacity-50"
                 >
                   +
                 </button>

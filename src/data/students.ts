@@ -1,14 +1,39 @@
-export const students = [
-  "Abid Aqillah Pradinata", "Aina Talita Zahra", "Alya Okta Rinjani", "Aqilah Fika Gumay",
-  "Ariska Anatasya", "Avika Cinta Simbolon", "Birma Satria Raja", "Cheyra Qatrunnada Faiha",
-  "Deka Wijaya", "Jihan Alfiyah", "Kenneth Theo Natanael", "Kirana Dafina Cheiko",
-  "Maulidina Dewi Kusuma Wardani", "Muhamad Devan", "Muhammad Adlan Faqih",
-  "Muhammad Dimas Tirto Aji", "Nadhifa Hoirun Nisa", "Nanda Satria Al Fatih",
-  "Navranda Ksatria", "Nayla Syabani", "Nazmi Khansa Tabina", "Nazwa Fitria Rahmadhani",
-  "Nur Taufik", "Qinara Zevannya Putri Diandi", "Raisa Fiona Nadine Septiani",
-  "Ramadhan Ibnu Aliansyah", "Ramadony Pratama", "Reysha Mikhayla Almira",
-  "Samuel Simamora", "Shaqila Hafizah Siregar", "Siti Rahma Aulia", "Tasya Setia Ningrum"
-];
+export const studentPasswords: Record<string, string> = {
+  "Abid Aqillah Pradinata": "3338",
+  "Aina Talita Zahra": "3341",
+  "Alya Okta Rinjani": "3503",
+  "Aqilah Fika Gumay": "3346",
+  "Ariska Anatasya": "3618",
+  "Avika Cinta Simbolon": "3348",
+  "Birma Satria Raja": "3349",
+  "Cheyra Qatrunnada Faiha": "3351",
+  "Deka Wijaya": "3353",
+  "Jihan Alfiyah": "3785",
+  "Kenneth Theo Natanael": "3361",
+  "Kirana Dafina Cheiko": "3362",
+  "Maulidina Dewi Kusuma Wardani": "3671",
+  "Muhamad Devan": "3366",
+  "Muhammad Adlan Faqih": "3368",
+  "Muhammad Dimas Tirto Aji": "3289",
+  "Nadhifa Hoirun Nisa": "3374",
+  "Nanda Satria Al Fatih": "3375",
+  "Navranda Ksatria": "3378",
+  "Nayla Syabani": "3379",
+  "Nazmi Khansa Tabina": "3853",
+  "Nazwa Fitria Rahmadhani": "3381",
+  "Nur Taufik": "3383",
+  "Qinara Zevannya Putri Diandi": "3786",
+  "Raisa Fiona Nadine Septiani": "3386",
+  "Ramadhan Ibnu Aliansyah": "3387",
+  "Ramadony Pratama": "3309",
+  "Reysha Mikhayla Almira": "3389",
+  "Samuel Simamora": "3394",
+  "Shaqila Hafizah Siregar": "3611",
+  "Siti Rahma Aulia": "3396",
+  "Tasya Setia Ningrum": "3399"
+};
+
+export const students = Object.keys(studentPasswords);
 
 export const quotes = [
   '"Puasa adalah perisai, maka janganlah berkata kotor dan jangan pula berbuat jahil." - HR. Bukhari',

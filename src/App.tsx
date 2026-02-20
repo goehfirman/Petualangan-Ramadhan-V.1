@@ -27,8 +27,12 @@ import {
 import { AmalanRecord } from './types';
 
 export default function App() {
-  const [currentUser, setCurrentUser] = useState<string | null>(null);
-  const [activeSection, setActiveSection] = useState('home');
+  const [currentUser, setCurrentUser] = useState<string | null>(() => {
+    return localStorage.getItem('currentUser');
+  });
+  const [activeSection, setActiveSection] = useState(() => {
+    return localStorage.getItem('activeSection') || 'home';
+  });
   const [currentDay, setCurrentDay] = useState(1);
   const [currentRecord, setCurrentRecord] = useState<AmalanRecord | undefined>(undefined);
   const [totalExp, setTotalExp] = useState(0);
@@ -99,12 +103,21 @@ export default function App() {
 
   const handleLogin = (name: string) => {
     setCurrentUser(name);
+    localStorage.setItem('currentUser', name);
     setActiveSection('home');
+    localStorage.setItem('activeSection', 'home');
   };
 
   const handleLogout = () => {
     setCurrentUser(null);
+    localStorage.removeItem('currentUser');
     setActiveSection('home');
+    localStorage.removeItem('activeSection');
+  };
+
+  const handleNavigate = (section: string) => {
+    setActiveSection(section);
+    localStorage.setItem('activeSection', section);
   };
 
   const handleSaveRecord = async (record: AmalanRecord) => {
@@ -137,7 +150,7 @@ export default function App() {
           currentUser={currentUser} 
           totalExp={totalExp} 
           activeSection={activeSection} 
-          onNavigate={setActiveSection} 
+          onNavigate={handleNavigate} 
           onLogout={handleLogout}
           currentDate={currentDateString}
         />
@@ -150,7 +163,7 @@ export default function App() {
               quranPages={totalQuranPages} 
               rank={rank} 
               quote={dailyQuote}
-              onNavigate={setActiveSection}
+              onNavigate={handleNavigate}
             />
           )}
           

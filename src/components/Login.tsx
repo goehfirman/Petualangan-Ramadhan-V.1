@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { students } from '../data/students';
+import { students, studentPasswords } from '../data/students';
 
 interface LoginProps {
   onLogin: (name: string) => void;
@@ -15,10 +15,12 @@ export default function Login({ onLogin }: LoginProps) {
       setError('Pilih nama terlebih dahulu!');
       return;
     }
-    if (password !== '1234') {
-      setError('Password salah! Gunakan: 1234');
+    
+    if (studentPasswords[selectedName] !== password) {
+      setError('Password salah! Silakan cek kembali.');
       return;
     }
+    
     onLogin(selectedName);
   };
 
