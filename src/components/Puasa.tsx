@@ -219,9 +219,9 @@ export default function Puasa() {
             <div className="bg-yellow-50 rounded-3xl p-8 border-4 border-yellow-100 shadow-sm btn-pop">
               <h3 className="font-black text-yellow-700 text-xl mb-6 text-center">🤲 Doa Berbuka Puasa</h3>
               <div className="bg-white rounded-3xl p-6 text-center border-4 border-yellow-100 shadow-inner">
-                <p className="font-amiri text-3xl text-yellow-700 mb-4 leading-relaxed">ذَهَبَ الظَّمَأُ وَابْتَلَّتِ الْعُرُوقُ</p>
-                <p className="text-orange-500 font-black mb-3 text-lg italic">Dzahabazh zhama'u wabtallatil 'uruuqu</p>
-                <p className="text-blue-600 font-bold">"Telah hilang rasa haus, dan urat-urat telah basah, insya Allah"</p>
+                <p className="font-amiri text-3xl text-yellow-700 mb-4 leading-relaxed">ذَهَبَ الظَّمَأُ، وَابْتَلَّتِ الْعُرُوقُ، وَثَبَتَ الْأَجْرُ إِنْ شَاءَ اللَّهُ</p>
+                <p className="text-orange-500 font-black mb-3 text-lg italic">"Dzahabaz zhama'u wabtallatil 'uruuqu wa tsabatal ajru insyaa Allah."</p>
+                <p className="text-blue-600 font-bold">"Telah hilang rasa haus, dan urat-urat telah basah, serta pahala telah tetap, insya Allah."</p>
               </div>
             </div>
           </div>
