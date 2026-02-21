@@ -1,7 +1,9 @@
 export const students = [
   "Muhammad Kautsar Al Khawarizmi",
   "Muhammad Kahfi Al Farabi",
-  "Annasya Shabira Zaina"
+  "Annasya Shabira Zaina",
+  "Ghyan Putra Hamdan",
+  "Arka Al Fath Arttalenta"
 ];
 
 export const quotes = [
