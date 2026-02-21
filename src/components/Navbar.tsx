@@ -21,7 +21,7 @@ export default function Navbar({ currentUser, totalExp, activeSection, onNavigat
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-white border-b-4 border-blue-100 shadow-sm">
+    <nav className="bg-white border-b-4 border-blue-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between py-3">
           <div className="flex items-center gap-3">

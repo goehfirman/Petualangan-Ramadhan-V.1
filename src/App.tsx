@@ -130,17 +130,19 @@ export default function App() {
 
   return (
     <div className="h-full overflow-auto scroll-hidden gradient-bg text-white relative font-poppins">
-      <div className="relative z-20 min-h-screen pb-20">
-        <Navbar 
-          currentUser={currentUser} 
-          totalExp={totalExp} 
-          activeSection={activeSection} 
-          onNavigate={handleNavigate} 
-          onLogout={handleLogout}
-          currentDate={currentDateString}
-        />
+      <div className="relative z-20 min-h-screen pb-20 flex flex-col">
+        <div className="sticky top-0 z-50 w-full">
+          <Navbar 
+            currentUser={currentUser} 
+            totalExp={totalExp} 
+            activeSection={activeSection} 
+            onNavigate={handleNavigate} 
+            onLogout={handleLogout}
+            currentDate={currentDateString}
+          />
+        </div>
 
-        <main className="max-w-5xl mx-auto p-4">
+        <main className="max-w-5xl mx-auto p-4 w-full flex-1">
           {activeSection === 'home' && (
             <Home 
               day={currentDay} 
