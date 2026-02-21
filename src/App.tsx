@@ -51,21 +51,6 @@ export default function App() {
     // Set random quote
     setDailyQuote(quotes[Math.floor(Math.random() * quotes.length)]);
 
-    // Create stars
-    const starsContainer = document.getElementById('stars');
-    if (starsContainer && starsContainer.childElementCount === 0) {
-      for (let i = 0; i < 100; i++) {
-        const star = document.createElement('div');
-        star.className = 'star animate-twinkle';
-        star.style.left = Math.random() * 100 + '%';
-        star.style.top = Math.random() * 100 + '%';
-        star.style.width = Math.random() * 3 + 1 + 'px';
-        star.style.height = star.style.width;
-        star.style.animationDelay = Math.random() * 2 + 's';
-        starsContainer.appendChild(star);
-      }
-    }
-
     // Update time
     const updateTime = () => {
       const now = new Date();
@@ -132,8 +117,6 @@ export default function App() {
   if (!currentUser) {
     return (
       <div className="h-full overflow-auto scroll-hidden gradient-bg text-white relative">
-        <div id="stars" className="fixed inset-0 pointer-events-none z-0"></div>
-        <div className="fixed top-8 right-8 w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 to-yellow-300 shadow-2xl animate-float z-10 opacity-90"></div>
         <div className="relative z-20">
           <Login onLogin={handleLogin} />
         </div>
@@ -147,9 +130,6 @@ export default function App() {
 
   return (
     <div className="h-full overflow-auto scroll-hidden gradient-bg text-white relative font-poppins">
-      <div id="stars" className="fixed inset-0 pointer-events-none z-0"></div>
-      <div className="fixed top-8 right-8 w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 to-yellow-300 shadow-2xl animate-float z-10 opacity-90"></div>
-      
       <div className="relative z-20 min-h-screen pb-20">
         <Navbar 
           currentUser={currentUser} 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { saveInquiry } from '../utils/ramadhan';
 
 interface InquiryProps {
   currentUser: string;
@@ -17,18 +17,7 @@ export default function Inquiry({ currentUser }: InquiryProps) {
     setStatus('submitting');
 
     try {
-      const { error } = await supabase
-        .from('inquiries')
-        .insert([
-          {
-            student_name: currentUser,
-            subject: subject,
-            message: message,
-          },
-        ]);
-
-      if (error) throw error;
-
+      await saveInquiry(currentUser, subject, message);
       setStatus('success');
       setSubject('');
       setMessage('');

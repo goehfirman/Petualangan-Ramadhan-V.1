@@ -1,6 +1,26 @@
 import { AmalanRecord, StudentRank } from '../types';
 import { students } from '../data/students';
-import { supabase } from '../lib/supabase';
+
+const STORAGE_KEY = 'ramadhan_records';
+const INQUIRY_STORAGE_KEY = 'ramadhan_inquiries';
+
+const getLocalRecords = (): AmalanRecord[] => {
+  const data = localStorage.getItem(STORAGE_KEY);
+  return data ? JSON.parse(data) : [];
+};
+
+const setLocalRecords = (records: AmalanRecord[]) => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+};
+
+const getLocalInquiries = (): any[] => {
+  const data = localStorage.getItem(INQUIRY_STORAGE_KEY);
+  return data ? JSON.parse(data) : [];
+};
+
+const setLocalInquiries = (inquiries: any[]) => {
+  localStorage.setItem(INQUIRY_STORAGE_KEY, JSON.stringify(inquiries));
+};
 
 export const calculateExp = (record: Partial<AmalanRecord>): number => {
   let exp = 0;
@@ -18,6 +38,8 @@ export const calculateExp = (record: Partial<AmalanRecord>): number => {
   exp += sholatPoints(record.sholat_isya || null);
   exp += sholatPoints(record.sholat_tarawih || null);
 
+  if (record.sahur) exp += 10;
+  if (record.puasa) exp += 15;
   if (record.sholat_dhuha) exp += 10;
   if (record.infaq) exp += 15;
   if (record.dzikir) exp += 15;
@@ -55,124 +77,55 @@ export const getRamadhanDay = (): number => {
 };
 
 export const getAllRecords = async (): Promise<AmalanRecord[]> => {
-  try {
-    const { data, error } = await supabase
-      .from('amalan_records')
-      .select('*');
-      
-    if (error) {
-      console.error("Error fetching records:", error);
-      return [];
-    }
-    return data || [];
-  } catch (e) {
-    console.error("Failed to load data", e);
-    return [];
-  }
+  return getLocalRecords();
 };
 
 export const getUserRecords = async (studentName: string): Promise<AmalanRecord[]> => {
-  try {
-    const { data, error } = await supabase
-      .from('amalan_records')
-      .select('*')
-      .eq('student_name', studentName);
-      
-    if (error) {
-      console.error("Error fetching user records:", error);
-      return [];
-    }
-    return data || [];
-  } catch (e) {
-    console.error("Failed to load user data", e);
-    return [];
-  }
+  const records = getLocalRecords();
+  return records.filter(r => r.student_name === studentName);
 };
 
 export const saveRecord = async (record: AmalanRecord) => {
-  try {
-    const { error } = await supabase
-      .from('amalan_records')
-      .upsert(record, { onConflict: 'student_name, day' });
-      
-    if (error) {
-      console.error("Error saving record:", error);
-      throw error;
-    }
-  } catch (e) {
-    console.error("Failed to save data", e);
-    throw e;
+  const records = getLocalRecords();
+  const index = records.findIndex(r => r.student_name === record.student_name && r.day === record.day);
+  
+  if (index >= 0) {
+    records[index] = { ...record, updated_at: new Date().toISOString() };
+  } else {
+    records.push({ ...record, updated_at: new Date().toISOString() });
   }
+  
+  setLocalRecords(records);
 };
 
 export const getRecord = async (studentName: string, day: number): Promise<AmalanRecord | undefined> => {
-  try {
-    const { data, error } = await supabase
-      .from('amalan_records')
-      .select('*')
-      .eq('student_name', studentName)
-      .eq('day', day)
-      .single();
-      
-    if (error && error.code !== 'PGRST116') { // PGRST116 is "Row not found"
-      console.error("Error fetching record:", error);
-    }
-    
-    return data || undefined;
-  } catch (e) {
-    console.error("Failed to get record", e);
-    return undefined;
-  }
+  const records = getLocalRecords();
+  return records.find(r => r.student_name === studentName && r.day === day);
 };
 
 export const getTotalExp = async (studentName: string): Promise<number> => {
-  try {
-    const { data, error } = await supabase
-      .from('amalan_records')
-      .select('total_exp')
-      .eq('student_name', studentName);
-      
-    if (error) {
-      console.error("Error calculating total exp:", error);
-      return 0;
-    }
-    
-    return data?.reduce((sum, r) => sum + (r.total_exp || 0), 0) || 0;
-  } catch (e) {
-    console.error("Failed to get total exp", e);
-    return 0;
-  }
+  const records = getLocalRecords();
+  return records
+    .filter(r => r.student_name === studentName)
+    .reduce((sum, r) => sum + (r.total_exp || 0), 0);
 };
 
 export const getLeaderboard = async (): Promise<StudentRank[]> => {
-  try {
-    const { data: records, error } = await supabase
-      .from('amalan_records')
-      .select('student_name, total_exp');
+  const records = getLocalRecords();
+  const expMap = new Map<string, number>();
+  
+  // Initialize with 0
+  students.forEach(s => expMap.set(s, 0));
+  
+  // Add actual exp
+  records.forEach(r => {
+    const current = expMap.get(r.student_name) || 0;
+    expMap.set(r.student_name, current + (r.total_exp || 0));
+  });
 
-    if (error) {
-      console.error("Error fetching leaderboard data:", error);
-      return [];
-    }
-
-    const expMap = new Map<string, number>();
-    
-    // Initialize with 0
-    students.forEach(s => expMap.set(s, 0));
-    
-    // Add actual exp
-    records?.forEach(r => {
-      const current = expMap.get(r.student_name) || 0;
-      expMap.set(r.student_name, current + (r.total_exp || 0));
-    });
-
-    return Array.from(expMap.entries())
-      .map(([name, exp]) => ({ name, exp }))
-      .sort((a, b) => b.exp - a.exp);
-  } catch (e) {
-    console.error("Failed to get leaderboard", e);
-    return [];
-  }
+  return Array.from(expMap.entries())
+    .map(([name, exp]) => ({ name, exp }))
+    .sort((a, b) => b.exp - a.exp);
 };
 
 export const getDateFromRamadhanDay = (day: number): Date => {
@@ -219,4 +172,19 @@ export const convertToHijri = (date: Date): string => {
   const monthName = monthsHijri[hijriMonth - 1] || '';
   
   return `${hijriDay} ${monthName} ${hijriYear} H`;
+};
+
+export const saveInquiry = async (studentName: string, subject: string, message: string) => {
+  const inquiries = getLocalInquiries();
+  inquiries.push({
+    student_name: studentName,
+    subject,
+    message,
+    created_at: new Date().toISOString()
+  });
+  setLocalInquiries(inquiries);
+};
+
+export const getAllInquiries = async (): Promise<any[]> => {
+  return getLocalInquiries();
 };

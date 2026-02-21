@@ -83,13 +83,15 @@ export default function AdminDashboard({ onLogout }: AdminDashboardProps) {
       record.sholat_maghrib ? (record.sholat_maghrib === 'jamaah' ? 'Jamaah' : 'Munfarid') : '-',
       record.sholat_isya ? (record.sholat_isya === 'jamaah' ? 'Jamaah' : 'Munfarid') : '-',
       record.sholat_tarawih ? (record.sholat_tarawih === 'jamaah' ? 'Jamaah' : 'Munfarid') : '-',
+      record.sahur ? 'Ya' : 'Tidak',
+      record.puasa ? 'Ya' : 'Tidak',
       record.quran_pages || 0,
       record.total_exp || 0
     ]);
 
     autoTable(doc, {
       startY: 60,
-      head: [['Hari', 'Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya', 'Tarawih', 'Quran (Hal)', 'EXP']],
+      head: [['Hari', 'Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya', 'Tarawih', 'Sahur', 'Puasa', 'Quran (Hal)', 'EXP']],
       body: tableData,
     });
 

@@ -22,9 +22,15 @@
   50% { transform: translateY(-10px); }
 }
 
-@keyframes twinkle {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
+@keyframes bounce-subtle {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-3deg); }
+  75% { transform: rotate(3deg); }
 }
 
 @keyframes slideIn {
@@ -33,53 +39,64 @@
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.4); }
-  50% { box-shadow: 0 0 40px rgba(251, 191, 36, 0.8); }
-}
-
-@keyframes rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-@keyframes gradient-move {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0%, 100% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.4); }
+  50% { box-shadow: 0 0 25px rgba(255, 255, 255, 0.7); }
 }
 
 .animate-float { animation: float 3s ease-in-out infinite; }
-.animate-twinkle { animation: twinkle 2s ease-in-out infinite; }
+.animate-bounce-subtle { animation: bounce-subtle 2s ease-in-out infinite; }
+.animate-wiggle { animation: wiggle 0.5s ease-in-out infinite; }
 .animate-slide-in { animation: slideIn 0.5s ease-out forwards; }
 .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
-.animate-rotate-slow { animation: rotate 20s linear infinite; }
-.animate-gradient-move { animation: gradient-move 3s ease infinite; }
 
 .gradient-bg {
-  background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 30%, #1e3a5f 60%, #0f2744 100%);
+  background-color: #4FC3F7; /* Bright Sky Blue */
+  background-image: radial-gradient(circle at 20% 20%, #81D4FA 0%, transparent 40%),
+                    radial-gradient(circle at 80% 80%, #29B6F6 0%, transparent 40%);
 }
 
 .card-gradient {
-  background: linear-gradient(145deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%);
-  backdrop-filter: blur(10px);
+  background-color: #FFFFFF;
+  border-radius: 24px;
+  box-shadow: 0 8px 0px rgba(0, 0, 0, 0.1);
 }
 
-.golden-gradient {
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+.btn-pop {
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.progress-bar {
-  background: linear-gradient(90deg, #fbbf24, #f59e0b, #ef4444, #ec4899);
-  background-size: 200% 100%;
-  animation: gradient-move 3s ease infinite;
+.btn-pop:hover {
+  transform: scale(1.05) translateY(-2px);
 }
 
-.star {
-  position: absolute;
-  background: white;
-  border-radius: 50%;
+.btn-pop:active {
+  transform: scale(0.95) translateY(0);
 }
 
-.compass-needle {
-  transition: transform 0.5s ease-out;
+.btn-primary {
+  background-color: #FF7043; /* Bright Orange */
+  color: white;
+  box-shadow: 0 4px 0px #D84315;
+}
+
+.btn-secondary {
+  background-color: #66BB6A; /* Bright Green */
+  color: white;
+  box-shadow: 0 4px 0px #2E7D32;
+}
+
+.btn-accent {
+  background-color: #FFCA28; /* Bright Yellow */
+  color: #5D4037;
+  box-shadow: 0 4px 0px #F9A825;
+}
+
+.btn-blue {
+  background-color: #42A5F5; /* Bright Blue */
+  color: white;
+  box-shadow: 0 4px 0px #1565C0;
+}
+
+.text-outline {
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }

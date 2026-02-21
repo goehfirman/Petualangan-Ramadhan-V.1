@@ -18,71 +18,71 @@ export default function Leaderboard({ currentUser }: LeaderboardProps) {
 
   return (
     <section className="space-y-6 animate-slide-in">
-      <div className="card-gradient rounded-3xl p-6 border border-white/20">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center text-2xl">🏆</div>
+      <div className="card-gradient p-8 border-4 border-white shadow-lg">
+        <div className="flex items-center gap-3 mb-8">
+          <div className="w-14 h-14 rounded-3xl bg-yellow-400 flex items-center justify-center text-3xl shadow-sm animate-bounce-subtle">🏆</div>
           <div>
-            <h2 className="text-2xl font-bold text-yellow-400">Leaderboard</h2>
-            <p className="text-white/60 text-sm">Peringkat Kelas 6A SDN Pekayon 09</p>
+            <h2 className="text-3xl font-black text-blue-600">Papan Juara</h2>
+            <p className="text-orange-500 font-bold text-sm">Siapa yang paling rajin ya? ✨</p>
           </div>
         </div>
 
-        <div className="flex items-end justify-center gap-2 mb-6">
+        <div className="flex items-end justify-center gap-3 mb-10">
           {/* 2nd Place */}
           <div className="text-center">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-2 rounded-full bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center text-3xl border-4 border-gray-400/50">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-3 rounded-3xl bg-gray-100 flex items-center justify-center text-4xl border-4 border-gray-200 shadow-sm btn-pop">
               🥈
             </div>
-            <div className="bg-gray-400/30 rounded-t-xl p-3 h-20 flex flex-col justify-end">
-              <p className="font-bold text-sm text-white truncate w-20 sm:w-24 mx-auto">{rankings[1]?.name.split(' ')[0] || '-'}</p>
-              <p className="text-xs text-gray-300">{rankings[1]?.exp || 0} EXP</p>
+            <div className="bg-gray-50 rounded-t-3xl p-4 h-24 flex flex-col justify-end border-x-4 border-t-4 border-gray-100">
+              <p className="font-black text-sm text-gray-700 truncate w-20 sm:w-24 mx-auto">{rankings[1]?.name.split(' ')[0] || '-'}</p>
+              <p className="text-xs font-bold text-gray-400">{rankings[1]?.exp || 0} EXP</p>
             </div>
           </div>
 
           {/* 1st Place */}
           <div className="text-center">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-2 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center text-4xl border-4 border-yellow-400/50 animate-pulse-glow">
+            <div className="w-24 h-24 sm:w-32 sm:h-32 mx-auto mb-3 rounded-3xl bg-yellow-100 flex items-center justify-center text-6xl border-4 border-yellow-200 shadow-md animate-bounce-subtle btn-pop">
               🥇
             </div>
-            <div className="bg-yellow-500/30 rounded-t-xl p-3 h-28 flex flex-col justify-end">
-              <p className="font-bold text-sm text-white truncate w-24 sm:w-28 mx-auto">{rankings[0]?.name.split(' ')[0] || '-'}</p>
-              <p className="text-xs text-yellow-300">{rankings[0]?.exp || 0} EXP</p>
+            <div className="bg-yellow-50 rounded-t-3xl p-4 h-32 flex flex-col justify-end border-x-4 border-t-4 border-yellow-100">
+              <p className="font-black text-base text-yellow-700 truncate w-24 sm:w-32 mx-auto">{rankings[0]?.name.split(' ')[0] || '-'}</p>
+              <p className="text-sm font-black text-yellow-500">{rankings[0]?.exp || 0} EXP</p>
             </div>
           </div>
 
           {/* 3rd Place */}
           <div className="text-center">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-2 rounded-full bg-gradient-to-br from-amber-600 to-amber-700 flex items-center justify-center text-3xl border-4 border-amber-600/50">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-3 rounded-3xl bg-orange-100 flex items-center justify-center text-4xl border-4 border-orange-200 shadow-sm btn-pop">
               🥉
             </div>
-            <div className="bg-amber-700/30 rounded-t-xl p-3 h-16 flex flex-col justify-end">
-              <p className="font-bold text-sm text-white truncate w-20 sm:w-24 mx-auto">{rankings[2]?.name.split(' ')[0] || '-'}</p>
-              <p className="text-xs text-amber-300">{rankings[2]?.exp || 0} EXP</p>
+            <div className="bg-orange-50 rounded-t-3xl p-4 h-20 flex flex-col justify-end border-x-4 border-t-4 border-orange-100">
+              <p className="font-black text-sm text-orange-700 truncate w-20 sm:w-24 mx-auto">{rankings[2]?.name.split(' ')[0] || '-'}</p>
+              <p className="text-xs font-bold text-orange-400">{rankings[2]?.exp || 0} EXP</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white/5 rounded-xl overflow-hidden">
-          <div className="grid grid-cols-12 gap-2 p-3 bg-white/10 text-sm font-bold text-yellow-300">
+        <div className="bg-blue-50 rounded-3xl overflow-hidden border-4 border-blue-100">
+          <div className="grid grid-cols-12 gap-2 p-4 bg-blue-100 text-sm font-black text-blue-600 uppercase tracking-wider">
             <div className="col-span-2 text-center">#</div>
-            <div className="col-span-7">Nama</div>
-            <div className="col-span-3 text-right">EXP</div>
+            <div className="col-span-7">Nama Teman</div>
+            <div className="col-span-3 text-right">Bintang</div>
           </div>
-          <div className="divide-y divide-white/10 max-h-80 overflow-y-auto scroll-hidden">
+          <div className="divide-y-2 divide-blue-100 max-h-80 overflow-y-auto scroll-hidden">
             {rankings.map((student, index) => {
               const isCurrentUser = student.name === currentUser;
               const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '';
               
               return (
-                <div key={student.name} className={`grid grid-cols-12 gap-2 p-3 hover:bg-white/5 transition ${isCurrentUser ? 'bg-emerald-500/20' : ''}`}>
-                  <div className={`col-span-2 text-center font-bold ${index < 3 ? 'text-yellow-400' : 'text-white/60'}`}>
+                <div key={student.name} className={`grid grid-cols-12 gap-2 p-4 hover:bg-blue-100 transition ${isCurrentUser ? 'bg-yellow-100' : 'bg-white'}`}>
+                  <div className={`col-span-2 text-center font-black text-lg ${index < 3 ? 'text-yellow-600' : 'text-blue-300'}`}>
                     {medal || (index + 1)}
                   </div>
-                  <div className={`col-span-7 truncate ${isCurrentUser ? 'text-emerald-300 font-bold' : ''}`}>
+                  <div className={`col-span-7 truncate font-bold ${isCurrentUser ? 'text-orange-600 font-black' : 'text-blue-800'}`}>
                     {student.name}
                   </div>
-                  <div className="col-span-3 text-right font-bold text-yellow-300">
-                    {student.exp}
+                  <div className="col-span-3 text-right font-black text-yellow-600">
+                    {student.exp} ⭐
                   </div>
                 </div>
               );
@@ -90,26 +90,26 @@ export default function Leaderboard({ currentUser }: LeaderboardProps) {
           </div>
         </div>
 
-        <div className="mt-4 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-xl p-4 border border-emerald-500/30">
+        <div className="mt-6 bg-emerald-100 rounded-3xl p-6 border-4 border-emerald-200 shadow-inner">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center font-bold text-gray-900">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-emerald-500 flex items-center justify-center font-black text-white text-2xl shadow-sm">
                 {myRankIndex >= 0 ? myRankIndex + 1 : '-'}
               </div>
               <div>
-                <p className="font-bold text-emerald-300">{currentUser}</p>
-                <p className="text-xs text-white/60">Peringkatmu</p>
+                <p className="font-black text-emerald-700 text-lg">{currentUser}</p>
+                <p className="text-xs font-bold text-emerald-500 uppercase tracking-wider">Peringkatmu</p>
               </div>
             </div>
             <div className="text-right">
-              <p className="text-2xl font-bold text-yellow-300">{myRank?.exp || 0} EXP</p>
+              <p className="text-3xl font-black text-yellow-600">{myRank?.exp || 0} ⭐</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="card-gradient rounded-xl p-4 border border-yellow-500/30">
-        <p className="text-center text-yellow-200/80 italic text-sm">🏆 "Berlomba-lombalah dalam kebaikan" - QS. Al-Baqarah: 148</p>
+      <div className="bg-white rounded-3xl p-6 border-4 border-yellow-200 shadow-md">
+        <p className="text-center text-yellow-600 font-bold italic text-base">🏆 "Ayo kita berlomba-lomba dalam kebaikan ya teman-teman!" 🏆</p>
       </div>
     </section>
   );

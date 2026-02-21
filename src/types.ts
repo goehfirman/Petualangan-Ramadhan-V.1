@@ -7,6 +7,8 @@ export interface AmalanRecord {
   sholat_maghrib: 'jamaah' | 'munfarid' | null;
   sholat_isya: 'jamaah' | 'munfarid' | null;
   sholat_tarawih: 'jamaah' | 'munfarid' | null;
+  sahur: boolean;
+  puasa: boolean;
   sholat_dhuha: boolean;
   infaq: boolean;
   dzikir: boolean;

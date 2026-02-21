@@ -21,30 +21,27 @@ export default function Navbar({ currentUser, totalExp, activeSection, onNavigat
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-gradient-to-r from-blue-900/95 to-blue-800/95 backdrop-blur-md border-b border-white/10">
+    <nav className="sticky top-0 z-50 bg-white border-b-4 border-blue-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between py-3">
           <div className="flex items-center gap-3">
-            <img 
-              src="https://i.ibb.co.com/YswcXgP/LOGO-PEKAYON-09.png" 
-              alt="Logo" 
-              className="w-10 h-10 object-contain"
-              referrerPolicy="no-referrer"
-            />
+            <div className="text-3xl animate-bounce-subtle">
+              🌙
+            </div>
             <div>
-              <h1 className="font-bold text-yellow-400">Petualangan Ramadhan</h1>
-              <p className="text-xs text-white/70">{currentUser}</p>
-              <p className="text-xs text-amber-300/80 font-medium">{currentDate}</p>
+              <h1 className="font-black text-blue-600 text-lg">Petualangan Ramadhan</h1>
+              <p className="text-xs text-orange-500 font-bold">{currentUser}</p>
+              <p className="text-[10px] text-blue-400 font-medium">{currentDate}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="hidden sm:flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full">
-              <span className="text-yellow-400">⭐</span>
-              <span className="font-bold text-yellow-300">{totalExp} EXP</span>
+            <div className="hidden sm:flex items-center gap-2 bg-yellow-100 px-3 py-1 rounded-full border-2 border-yellow-200">
+              <span className="text-yellow-500">⭐</span>
+              <span className="font-black text-yellow-700">{totalExp} EXP</span>
             </div>
             <button 
               onClick={onLogout}
-              className="p-2 hover:bg-white/10 rounded-full transition cursor-pointer" 
+              className="p-2 bg-red-100 text-red-500 hover:bg-red-200 rounded-full transition btn-pop cursor-pointer border-2 border-red-200" 
               title="Keluar"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -54,15 +51,15 @@ export default function Navbar({ currentUser, totalExp, activeSection, onNavigat
           </div>
         </div>
         
-        <div className="flex gap-1 pb-2 overflow-x-auto scroll-hidden">
+        <div className="flex gap-2 pb-3 overflow-x-auto scroll-hidden">
           {navItems.map((item) => (
             <button
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition cursor-pointer ${
+              className={`px-4 py-2 rounded-2xl text-sm font-black whitespace-nowrap transition btn-pop cursor-pointer border-2 ${
                 activeSection === item.id 
-                  ? 'bg-yellow-500/20 text-yellow-300' 
-                  : 'hover:bg-white/10 text-white/80'
+                  ? 'bg-orange-500 text-white border-orange-600 shadow-[0_4px_0_#D84315]' 
+                  : 'bg-blue-50 text-blue-600 border-blue-100 hover:bg-blue-100'
               }`}
             >
               {item.label}

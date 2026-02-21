@@ -12,61 +12,62 @@ interface HomeProps {
 export default function Home({ day, exp, quranPages, rank, quote, onNavigate }: HomeProps) {
   return (
     <section className="space-y-6 animate-slide-in">
-      <div className="card-gradient rounded-3xl p-6 border border-white/20 text-center">
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-yellow-300 via-orange-300 to-pink-300 bg-clip-text text-transparent mb-2">
-          ✨ Selamat Datang di Petualangan Ramadhan ✨
+      <div className="card-gradient p-8 border-4 border-white text-center shadow-lg">
+        <h2 className="text-4xl font-black text-blue-600 mb-4 drop-shadow-sm animate-bounce-subtle">
+          ✨ HALO TEMAN-TEMAN! ✨
         </h2>
-        <p className="text-yellow-200/80">Ayo semangat beribadah di bulan penuh berkah!</p>
+        <p className="text-orange-500 font-bold text-lg">Ayo semangat beribadah di bulan Ramadhan! 🌙</p>
         
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
-          <div className="bg-gradient-to-br from-emerald-500/30 to-emerald-600/30 rounded-2xl p-4">
-            <div className="text-3xl mb-2">🌙</div>
-            <div className="text-2xl font-bold text-emerald-300">{day}</div>
-            <div className="text-xs text-white/70">Hari ke</div>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8">
+          <div className="bg-blue-100 rounded-3xl p-5 border-4 border-blue-200 shadow-sm btn-pop">
+            <div className="text-4xl mb-2">🌙</div>
+            <div className="text-3xl font-black text-blue-600">{day}</div>
+            <div className="text-xs font-bold text-blue-400 uppercase tracking-wider">Hari ke</div>
           </div>
-          <div className="bg-gradient-to-br from-yellow-500/30 to-orange-500/30 rounded-2xl p-4">
-            <div className="text-3xl mb-2">⭐</div>
-            <div className="text-2xl font-bold text-yellow-300">{exp}</div>
-            <div className="text-xs text-white/70">Total EXP</div>
+          <div className="bg-yellow-100 rounded-3xl p-5 border-4 border-yellow-200 shadow-sm btn-pop">
+            <div className="text-4xl mb-2">⭐</div>
+            <div className="text-3xl font-black text-yellow-700">{exp}</div>
+            <div className="text-xs font-bold text-yellow-600 uppercase tracking-wider">Total EXP</div>
           </div>
-          <div className="bg-gradient-to-br from-pink-500/30 to-rose-500/30 rounded-2xl p-4">
-            <div className="text-3xl mb-2">📖</div>
-            <div className="text-2xl font-bold text-pink-300">{quranPages}</div>
-            <div className="text-xs text-white/70">Halaman Quran</div>
+          <div className="bg-pink-100 rounded-3xl p-5 border-4 border-pink-200 shadow-sm btn-pop">
+            <div className="text-4xl mb-2">📖</div>
+            <div className="text-3xl font-black text-pink-600">{quranPages}</div>
+            <div className="text-xs font-bold text-pink-400 uppercase tracking-wider">Halaman</div>
           </div>
-          <div className="bg-gradient-to-br from-blue-500/30 to-indigo-500/30 rounded-2xl p-4">
-            <div className="text-3xl mb-2">🏆</div>
-            <div className="text-2xl font-bold text-blue-300">{rank}</div>
-            <div className="text-xs text-white/70">Peringkat</div>
+          <div className="bg-emerald-100 rounded-3xl p-5 border-4 border-emerald-200 shadow-sm btn-pop">
+            <div className="text-4xl mb-2">🏆</div>
+            <div className="text-3xl font-black text-emerald-600">{rank}</div>
+            <div className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Peringkat</div>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-6">
         <button 
           onClick={() => onNavigate('amalan')}
-          className="card-gradient rounded-2xl p-5 border border-white/20 text-left hover:bg-white/10 transition group cursor-pointer"
+          className="card-gradient p-6 border-4 border-white text-center hover:bg-blue-50 transition group cursor-pointer btn-pop shadow-md"
         >
-          <div className="text-4xl mb-3 group-hover:scale-110 transition">✅</div>
-          <h3 className="font-bold text-yellow-300">Catat Amalan</h3>
-          <p className="text-sm text-white/60">Isi amalan hari ini</p>
+          <div className="text-5xl mb-3 group-hover:animate-wiggle">✅</div>
+          <h3 className="font-black text-blue-600 text-xl">Catat Amalan</h3>
+          <p className="text-sm font-bold text-blue-400">Isi amalan hari ini</p>
         </button>
         <button 
           onClick={() => onNavigate('leaderboard')}
-          className="card-gradient rounded-2xl p-5 border border-white/20 text-left hover:bg-white/10 transition group cursor-pointer"
+          className="card-gradient p-6 border-4 border-white text-center hover:bg-yellow-50 transition group cursor-pointer btn-pop shadow-md"
         >
-          <div className="text-4xl mb-3 group-hover:scale-110 transition">🏆</div>
-          <h3 className="font-bold text-yellow-300">Leaderboard</h3>
-          <p className="text-sm text-white/60">Lihat peringkatmu</p>
+          <div className="text-5xl mb-3 group-hover:animate-wiggle">🏆</div>
+          <h3 className="font-black text-yellow-600 text-xl">Leaderboard</h3>
+          <p className="text-sm font-bold text-yellow-500">Lihat peringkatmu</p>
         </button>
       </div>
 
-      <div className="card-gradient rounded-3xl p-6 border border-yellow-500/30 animate-pulse-glow">
-        <div className="flex items-start gap-4">
-          <div className="text-4xl">💫</div>
+      <div className="bg-white rounded-3xl p-8 border-4 border-orange-200 shadow-lg relative overflow-hidden">
+        <div className="absolute -top-4 -right-4 text-6xl opacity-10 rotate-12">✨</div>
+        <div className="flex items-start gap-4 relative z-10">
+          <div className="text-5xl animate-float">💫</div>
           <div>
-            <h3 className="font-bold text-yellow-400 mb-2">Motivasi Hari Ini</h3>
-            <p className="text-white/90 italic">"{quote}"</p>
+            <h3 className="font-black text-orange-500 text-xl mb-2">Pesan Hari Ini</h3>
+            <p className="text-blue-600 font-bold text-lg italic">"{quote}"</p>
           </div>
         </div>
       </div>
