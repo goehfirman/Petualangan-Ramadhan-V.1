@@ -1,9 +1,11 @@
 import { AmalanRecord, StudentRank } from '../types';
 import { students } from '../data/students';
+import { supabase } from './supabase';
 
 const STORAGE_KEY = 'ramadhan_records';
 const INQUIRY_STORAGE_KEY = 'ramadhan_inquiries';
 
+// Fallback to local storage if Supabase fails or is not configured
 const getLocalRecords = (): AmalanRecord[] => {
   const data = localStorage.getItem(STORAGE_KEY);
   return data ? JSON.parse(data) : [];
@@ -77,55 +79,139 @@ export const getRamadhanDay = (): number => {
 };
 
 export const getAllRecords = async (): Promise<AmalanRecord[]> => {
-  return getLocalRecords();
+  try {
+    const { data, error } = await supabase
+      .from('amalan_records')
+      .select('*');
+      
+    if (error) throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Error fetching from Supabase, falling back to local storage:', error);
+    return getLocalRecords();
+  }
 };
 
 export const getUserRecords = async (studentName: string): Promise<AmalanRecord[]> => {
-  const records = getLocalRecords();
-  return records.filter(r => r.student_name === studentName);
+  try {
+    const { data, error } = await supabase
+      .from('amalan_records')
+      .select('*')
+      .eq('student_name', studentName);
+      
+    if (error) throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Error fetching from Supabase, falling back to local storage:', error);
+    const records = getLocalRecords();
+    return records.filter(r => r.student_name === studentName);
+  }
 };
 
 export const saveRecord = async (record: AmalanRecord) => {
-  const records = getLocalRecords();
-  const index = records.findIndex(r => r.student_name === record.student_name && r.day === record.day);
-  
-  if (index >= 0) {
-    records[index] = { ...record, updated_at: new Date().toISOString() };
-  } else {
-    records.push({ ...record, updated_at: new Date().toISOString() });
+  try {
+    const { error } = await supabase
+      .from('amalan_records')
+      .upsert({
+        ...record,
+        updated_at: new Date().toISOString()
+      }, {
+        onConflict: 'student_name, day'
+      });
+      
+    if (error) throw error;
+  } catch (error) {
+    console.error('Error saving to Supabase, falling back to local storage:', error);
+    const records = getLocalRecords();
+    const index = records.findIndex(r => r.student_name === record.student_name && r.day === record.day);
+    
+    if (index >= 0) {
+      records[index] = { ...record, updated_at: new Date().toISOString() };
+    } else {
+      records.push({ ...record, updated_at: new Date().toISOString() });
+    }
+    
+    setLocalRecords(records);
   }
-  
-  setLocalRecords(records);
 };
 
 export const getRecord = async (studentName: string, day: number): Promise<AmalanRecord | undefined> => {
-  const records = getLocalRecords();
-  return records.find(r => r.student_name === studentName && r.day === day);
+  try {
+    const { data, error } = await supabase
+      .from('amalan_records')
+      .select('*')
+      .eq('student_name', studentName)
+      .eq('day', day)
+      .single();
+      
+    if (error && error.code !== 'PGRST116') throw error; // PGRST116 is "no rows returned"
+    return data || undefined;
+  } catch (error) {
+    console.error('Error fetching from Supabase, falling back to local storage:', error);
+    const records = getLocalRecords();
+    return records.find(r => r.student_name === studentName && r.day === day);
+  }
 };
 
 export const getTotalExp = async (studentName: string): Promise<number> => {
-  const records = getLocalRecords();
-  return records
-    .filter(r => r.student_name === studentName)
-    .reduce((sum, r) => sum + (r.total_exp || 0), 0);
+  try {
+    const { data, error } = await supabase
+      .from('amalan_records')
+      .select('total_exp')
+      .eq('student_name', studentName);
+      
+    if (error) throw error;
+    return (data || []).reduce((sum, r) => sum + (r.total_exp || 0), 0);
+  } catch (error) {
+    console.error('Error fetching from Supabase, falling back to local storage:', error);
+    const records = getLocalRecords();
+    return records
+      .filter(r => r.student_name === studentName)
+      .reduce((sum, r) => sum + (r.total_exp || 0), 0);
+  }
 };
 
 export const getLeaderboard = async (): Promise<StudentRank[]> => {
-  const records = getLocalRecords();
-  const expMap = new Map<string, number>();
-  
-  // Initialize with 0
-  students.forEach(s => expMap.set(s, 0));
-  
-  // Add actual exp
-  records.forEach(r => {
-    const current = expMap.get(r.student_name) || 0;
-    expMap.set(r.student_name, current + (r.total_exp || 0));
-  });
+  try {
+    const { data, error } = await supabase
+      .from('amalan_records')
+      .select('student_name, total_exp');
+      
+    if (error) throw error;
+    
+    const records = data || [];
+    const expMap = new Map<string, number>();
+    
+    // Initialize with 0
+    students.forEach(s => expMap.set(s, 0));
+    
+    // Add actual exp
+    records.forEach(r => {
+      const current = expMap.get(r.student_name) || 0;
+      expMap.set(r.student_name, current + (r.total_exp || 0));
+    });
 
-  return Array.from(expMap.entries())
-    .map(([name, exp]) => ({ name, exp }))
-    .sort((a, b) => b.exp - a.exp);
+    return Array.from(expMap.entries())
+      .map(([name, exp]) => ({ name, exp }))
+      .sort((a, b) => b.exp - a.exp);
+  } catch (error) {
+    console.error('Error fetching from Supabase, falling back to local storage:', error);
+    const records = getLocalRecords();
+    const expMap = new Map<string, number>();
+    
+    // Initialize with 0
+    students.forEach(s => expMap.set(s, 0));
+    
+    // Add actual exp
+    records.forEach(r => {
+      const current = expMap.get(r.student_name) || 0;
+      expMap.set(r.student_name, current + (r.total_exp || 0));
+    });
+
+    return Array.from(expMap.entries())
+      .map(([name, exp]) => ({ name, exp }))
+      .sort((a, b) => b.exp - a.exp);
+  }
 };
 
 export const getDateFromRamadhanDay = (day: number): Date => {
@@ -175,16 +261,41 @@ export const convertToHijri = (date: Date): string => {
 };
 
 export const saveInquiry = async (studentName: string, subject: string, message: string) => {
-  const inquiries = getLocalInquiries();
-  inquiries.push({
-    student_name: studentName,
-    subject,
-    message,
-    created_at: new Date().toISOString()
-  });
-  setLocalInquiries(inquiries);
+  try {
+    const { error } = await supabase
+      .from('inquiries')
+      .insert({
+        student_name: studentName,
+        subject,
+        message,
+        created_at: new Date().toISOString()
+      });
+      
+    if (error) throw error;
+  } catch (error) {
+    console.error('Error saving to Supabase, falling back to local storage:', error);
+    const inquiries = getLocalInquiries();
+    inquiries.push({
+      student_name: studentName,
+      subject,
+      message,
+      created_at: new Date().toISOString()
+    });
+    setLocalInquiries(inquiries);
+  }
 };
 
 export const getAllInquiries = async (): Promise<any[]> => {
-  return getLocalInquiries();
+  try {
+    const { data, error } = await supabase
+      .from('inquiries')
+      .select('*')
+      .order('created_at', { ascending: false });
+      
+    if (error) throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Error fetching from Supabase, falling back to local storage:', error);
+    return getLocalInquiries();
+  }
 };
